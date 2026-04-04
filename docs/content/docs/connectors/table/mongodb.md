@@ -154,7 +154,7 @@ Connector Options
       <td>no</td>
       <td style="word-wrap: break-word;">default</td>
       <td>String</td>
-      <td>Specifies the partition strategy. Available strategies are `single`, `sample`, `split-vector`, `sharded` and `default`. 
+      <td>Specifies the partition strategy. Available strategies are `single`, `sample`, `split-vector`, `sharded`, `pagination` and `default`. 
           See the following <a href="#partitioned-scan">Partitioned Scan</a> section for more details.</td>
     </tr>
     <tr>
@@ -175,6 +175,15 @@ Connector Options
           The sample partitioner samples the collection, projects and sorts by the partition fields.
           Then uses every `scan.partition.samples` as the value to use to calculate the partition boundaries.
           The total number of samples taken is calculated as: `samples per partition * (count of documents / number of documents per partition)`.</td>
+    </tr>
+    <tr>
+      <td><h5>scan.partition.record-size</h5></td>
+      <td>optional</td>
+      <td>no</td>
+      <td style="word-wrap: break-word;">(none)</td>
+      <td>Integer</td>
+      <td>Specifies the number of records in each chunk. Only takes effect when the partition strategy is `pagination`.
+          This option will be automatically inferred from `scan.partition.size` if absent.</td>
     </tr>
     <tr>
       <td><h5>lookup.cache</h5></td>
@@ -366,6 +375,8 @@ feature for MongoDB collection. The following partition strategies are provided:
   range of the chunks are stored within the collection) as the partitions directly. The
   sharded strategy only used for sharded collection which is fast and even. Read permission
   of config database is required.
+- `pagination`: splits records evenly by count. Each chunk will have exactly the same number
+  of records. This can be configured by `scan.partition.record-size` option.
 - `default`: uses sharded strategy for sharded collections otherwise using split vector
   strategy.
 
