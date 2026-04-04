@@ -74,7 +74,7 @@ INSERT INTO MyUserTable
 SELECT _id, name, age, status FROM T;
 
 -- scan data from the MongoDB table
-SELECT id, name, age, status FROM MyUserTable;
+SELECT _id, name, age, status FROM MyUserTable;
 
 -- temporal join the MongoDB table as a dimension table
 SELECT * FROM myTopic
@@ -199,7 +199,7 @@ Connector Options
       <td>no</td>
       <td style="word-wrap: break-word;">(none)</td>
       <td>Duration</td>
-      <td>The max time to live for each rows in lookup cache after writing into the cache. 
+      <td>The max time to live for each row in lookup cache after writing into the cache. 
       "lookup.cache" must be set to "PARTIAL" to use this option. See the following <a href="#lookup-cache">Lookup Cache</a> section for more details. </td>
     </tr>
     <tr>
@@ -208,7 +208,7 @@ Connector Options
       <td>no</td>
       <td style="word-wrap: break-word;">(none)</td>
       <td>Duration</td>
-      <td>The max time to live for each rows in lookup cache after accessing the entry in the cache.
+      <td>The max time to live for each row in lookup cache after accessing the entry in the cache.
       "lookup.cache" must be set to "PARTIAL" to use this option. See the following <a href="#lookup-cache">Lookup Cache</a> section for more details. </td>
     </tr>
     <tr>
@@ -241,7 +241,7 @@ Connector Options
       <td>optional</td>
       <td>no</td>
       <td style="word-wrap: break-word;">always</td>
-      <td>Enum Possible values: always, never</td>
+      <td><p>Enum</p>Possible values: always, never</td>
       <td>Fine-grained configuration to control filter push down. 
           Supported policies are:
           <ul>
@@ -294,7 +294,7 @@ Connector Options
       <td><h5>sink.delivery-guarantee</h5></td>
       <td>optional</td>
       <td>no</td>
-      <td style="word-wrap: break-word;">at-lease-once</td>
+      <td style="word-wrap: break-word;">at-least-once</td>
       <td><p>Enum</p>Possible values: none, at-least-once</td>
       <td>Optional delivery guarantee when committing. The exactly-once guarantee is not supported yet.</td>
     </tr>
@@ -345,7 +345,7 @@ fields in the order defined in the DDL.
   value as _id of the corresponding document.
 - When there's multiple fields in the specified primary key, we convert and composite these fields 
   into a bson document as the _id of the corresponding document.
-  For example, if have a primary key statement `PRIMARY KEY (f1, f2) NOT ENFORCED`,
+  For example, if you have a primary key statement `PRIMARY KEY (f1, f2) NOT ENFORCED`,
   the extracted _id will be the form like `_id: {f1: v1, f2: v2}`.
 
 Notice that it will be ambiguous if the _id field exists in DDL, but the primary key is not declared as _id.
@@ -393,8 +393,8 @@ by setting `lookup.partial-cache.cache-missing-key` to false.
 
 ### Idempotent Writes
 
-MongoDB connector use upsert writing mode `db.connection.update(<query>, <update>, { upsert: true })` 
-rather than insert writing mode `db.connection.insert()` if primary key is defined in DDL.
+MongoDB connector use upsert writing mode `db.collection.update(<query>, <update>, { upsert: true })` 
+rather than insert writing mode `db.collection.insert()` if primary key is defined in DDL.
 We composite the primary key fields as the document _id which is the reserved primary key of
 MongoDB. Use upsert mode to write rows into MongoDB, which provides idempotence.
 
@@ -456,7 +456,7 @@ INSERT INTO MySinkTable SELECT _id, shardKey0, shardKey1, status FROM T;
 INSERT INTO MySinkTable PARTITION(shardKey0 = 'value0', shardKey1 = 'value1') SELECT 1, 'INIT';
 
 -- Insert with static(shardKey0) and dynamic(shardKey1) partition
-INSERT INTO MySinkTable PARTITION(shardKey0 = 'value0') SELECT 1, 'value1' 'INIT';
+INSERT INTO MySinkTable PARTITION(shardKey0 = 'value0') SELECT 1, 'value1', 'INIT';
 ```
 {{< hint warning >}}
 LIMITATION: Although the shard key value is no longer immutable in MongoDB 4.2 and later,

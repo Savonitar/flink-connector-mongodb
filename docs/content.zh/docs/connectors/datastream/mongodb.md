@@ -165,7 +165,7 @@ stream.sinkTo(sink);
 {{< /tabs >}}
 
 ### 配置项
-Flink 的 MongoDB Source 可以通过 `MongoSink.<InputType>builder()` 构造器构建。
+Flink 的 MongoDB Sink 可以通过 `MongoSink.<InputType>builder()` 构造器构建。
 
 1. __setUri(String uri)__
     * 必须。

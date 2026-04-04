@@ -207,10 +207,10 @@ Flink's MongoDB sink is created by using the static builder `MongoSink.<InputTyp
 8. _setOrderedWrites(boolean ordered)_
     * Optional. Default: `true`
     * Defines MongoDB driver option to perform ordered writes.
-8. _setBypassDocumentValidation(boolean bypassDocumentValidation)_
+9. _setBypassDocumentValidation(boolean bypassDocumentValidation)_
     * Optional. Default: `false`
     * Defines MongoDB driver option to bypass document validation. 
-9. __setSerializationSchema(MongoSerializationSchema<InputType> serializationSchema)__
+10. __setSerializationSchema(MongoSerializationSchema<InputType> serializationSchema)__
     * Required.
     * A `MongoSerializationSchema` is required for parsing input record to MongoDB 
       [WriteModel](https://www.mongodb.com/docs/drivers/java/sync/current/usage-examples/bulkWrite/).
